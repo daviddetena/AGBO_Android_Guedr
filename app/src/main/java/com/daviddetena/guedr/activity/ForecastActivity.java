@@ -1,4 +1,4 @@
-package com.daviddetena.guedr;
+package com.daviddetena.guedr.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -6,7 +6,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ToggleButton;
 
-public class MainActivity extends AppCompatActivity{
+import com.daviddetena.guedr.R;
+
+public class ForecastActivity extends AppCompatActivity{
 
     private ImageView mImageView = null;
 
