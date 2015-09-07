@@ -2,7 +2,7 @@
     <string name="app_name">Güedr</string>
 
     <string name="hello_world">Hola Amundio!</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Ajustes</string>
     <string name="weather_system">Cambiar sistema de predicción</string>
     <string name="european_system">Sistema Europeo</string>
     <string name="american_system">Sistema americano</string>

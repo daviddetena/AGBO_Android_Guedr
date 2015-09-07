@@ -1,11 +1,12 @@
 package com.daviddetena.guedr.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import com.daviddetena.guedr.R;
 import com.daviddetena.guedr.model.Forecast;
@@ -51,5 +52,27 @@ public class ForecastActivity extends AppCompatActivity{
         mMinTemp.setText(String.format(getString(R.string.min_temp_parameter), forecast.getMinTemp()));
         mHumidity.setText(String.format(getString(R.string.humidity_parameter), forecast.getHumidity()));
         mDescription.setText(forecast.getDescription());
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Creamos menú a partir del fichero xml forecast
+        getMenuInflater().inflate(R.menu.forecast, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        // Comprobamos que la opción de menú pulsada es la de ajustes
+        if(item.getItemId() == R.id.menu_settings){
+            // Si se pulsa el botón de ajustes del menú, lanzamos la pantalla de ajustes
+            // Lanzamos la pantalla de ajustes sin esperar resultado
+            Intent settingsIntent = new Intent(this, SettingsActivity.class);
+            startActivity(settingsIntent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
