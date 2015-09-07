@@ -23,27 +23,13 @@
         android:src="@drawable/offline_weather" />
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <ToggleButton
+        android:id="@+id/change_system_button"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/system1_button"
-            android:text="@string/european_system"
-            android:layout_weight="1"
-            />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/system2_button"
-            android:text="@string/american_system"
-            android:layout_weight="1"
-            />
-    </LinearLayout>
+        android:textOn="@string/european_system"
+        android:textOff="@string/american_system"/>
 
 
 
