@@ -19,7 +19,7 @@ public class Forecast {
      * @param maxTemp
      * @param minTemp
      */
-    public Forecast(String description, float humidity, String icon, float maxTemp, float minTemp) {
+    public Forecast(float maxTemp, float minTemp, float humidity, String description, String icon) {
         mDescription = description;
         mHumidity = humidity;
         mIcon = icon;
