@@ -87,8 +87,8 @@ public class ForecastActivity extends AppCompatActivity{
         }
 
         // Utilizamos el format para pasarlo a @string y poder internacionalizar a idiomas
-        mMaxTemp.setText(String.format(getString(R.string.max_temp_parameter), maxTemp) +  metricString);
-        mMinTemp.setText(String.format(getString(R.string.min_temp_parameter), minTemp) + metricString);
+        mMaxTemp.setText(String.format(getString(R.string.max_temp_parameter), maxTemp, metricString));
+        mMinTemp.setText(String.format(getString(R.string.min_temp_parameter), minTemp, metricString));
         mHumidity.setText(String.format(getString(R.string.humidity_parameter), forecast.getHumidity()));
         mDescription.setText(forecast.getDescription());
 
