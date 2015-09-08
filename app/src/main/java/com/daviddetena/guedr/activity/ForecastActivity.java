@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -125,17 +127,41 @@ public class ForecastActivity extends AppCompatActivity{
 
         // Obtengo referencia a preferencias. Todas las activity tienen un método
         // getString(clave_pref_por_la_que_accedo, valor_defecto_si_no_hay_nada_seleccionado -[0:celsius])
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         String stringMetrics = pref.getString(getString(R.string.metric_selection),
                 String.valueOf(SettingsActivity.PREF_CELSIUS));
 
         int metrics = Integer.valueOf(stringMetrics);
 
         // Si el usuario ha seleccionado otra opción de metricas, actualizo la variable y el
-        // modelo
+        // modelo. También meto una snackbar para indicar al usuario que los ajustes se han
+        // modificado.
         if(metrics != mCurrentMetrics){
+            final int previousMetrics = mCurrentMetrics;
             mCurrentMetrics = metrics;
             setForecast(mForecast);
+
+            // Snackbar, similar a Toast. Necesitamos saber la vista raíz. Incluimos una acción
+            // para deshacer los cambios en las preferencias de las métricas, al pulsar en botón
+            // deshacer
+            // Cambiamos commit() por apply() para que vaya a segundo plano y no necesite respuesta
+            Snackbar.make(
+                    findViewById(android.R.id.content),
+                    R.string.updated_preferences,
+                    Snackbar.LENGTH_LONG)
+                    .setAction(R.string.undo, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // Deshacemos cambios
+                            // Entramos en modo edición
+                            pref.edit().putString(getString(R.string.metric_selection),
+                                        String.valueOf(previousMetrics))
+                                        .apply();
+                            mCurrentMetrics = previousMetrics;
+                            setForecast(mForecast);
+                        }
+                    })
+                    .show();
         }
     }
 }

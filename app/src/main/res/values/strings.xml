@@ -9,4 +9,6 @@
     <string name="max_temp_parameter">Temperatura máxima: %.2f</string>
     <string name="min_temp_parameter">Temperatura mínima: %.2f</string>
     <string name="humidity_parameter">Humedad: %.0f %%</string>
+    <string name="updated_preferences">Preferencias actualizadas</string>
+    <string name="undo">Deshacer</string>
 </resources>
