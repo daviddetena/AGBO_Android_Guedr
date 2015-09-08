@@ -1,7 +1,9 @@
 package com.daviddetena.guedr.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +24,10 @@ public class ForecastActivity extends AppCompatActivity{
     private TextView mHumidity;
     private TextView mDescription;
 
+    // Atributo con el que muestro la temperatura en cada momento
+    private int mCurrentMetrics;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,9 +41,28 @@ public class ForecastActivity extends AppCompatActivity{
         mDescription = (TextView) findViewById(R.id.forecast_description);
         mIcon = (ImageView) findViewById(R.id.forecast_image);
 
+        // Obtengo referencia a preferencias. Todas las activity tienen un método
+        // getString(clave_pref_por_la_que_accedo, valor_defecto_si_no_hay_nada_seleccionado -[0:celsius])
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        String stringMetrics = pref.getString(getString(R.string.metric_selection),
+                String.valueOf(SettingsActivity.PREF_CELSIUS));
+
+        mCurrentMetrics = Integer.valueOf(stringMetrics);
+
         // Sincronizamos modelo y vista
         setForecast(new Forecast(30, 15, 25, "Algunas nubes", "ico01"));
     }
+
+
+    /**
+     * Convertimos unidades C en F
+     * @param celsius
+     * @return
+     */
+    protected static float toFarenheit(float celsius){
+        return (celsius * 1.8f) + 32;
+    }
+
 
     /**
      * Método para asignar Forecast con los datos que nos pasan, es decir, sincronizamos modelo y
@@ -47,11 +72,25 @@ public class ForecastActivity extends AppCompatActivity{
     public void setForecast(Forecast forecast){
         mForecast = forecast;
 
+        // Por defecto en celsius, y si no, convertimos a Farenheit
+        float maxTemp = mCurrentMetrics == SettingsActivity.PREF_CELSIUS ? forecast.getMaxTemp() : toFarenheit(forecast.getMaxTemp());
+        float minTemp = mCurrentMetrics == SettingsActivity.PREF_CELSIUS ? forecast.getMinTemp() : toFarenheit(forecast.getMinTemp());
+
+        String metricString;
+        if(mCurrentMetrics == SettingsActivity.PREF_CELSIUS){
+            metricString = "ºC";
+        }
+        else{
+            metricString = "ºF";
+        }
+
         // Utilizamos el format para pasarlo a @string y poder internacionalizar a idiomas
-        mMaxTemp.setText(String.format(getString(R.string.max_temp_parameter), forecast.getMaxTemp()));
-        mMinTemp.setText(String.format(getString(R.string.min_temp_parameter), forecast.getMinTemp()));
+        mMaxTemp.setText(String.format(getString(R.string.max_temp_parameter), maxTemp) +  metricString);
+        mMinTemp.setText(String.format(getString(R.string.min_temp_parameter), minTemp) + metricString);
         mHumidity.setText(String.format(getString(R.string.humidity_parameter), forecast.getHumidity()));
         mDescription.setText(forecast.getDescription());
+
+
     }
 
 
@@ -74,5 +113,29 @@ public class ForecastActivity extends AppCompatActivity{
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Queremos que cuando se vuelva a mostrar esta vista se actualice el valor de las preferencias
+     * de grados
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Obtengo referencia a preferencias. Todas las activity tienen un método
+        // getString(clave_pref_por_la_que_accedo, valor_defecto_si_no_hay_nada_seleccionado -[0:celsius])
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        String stringMetrics = pref.getString(getString(R.string.metric_selection),
+                String.valueOf(SettingsActivity.PREF_CELSIUS));
+
+        int metrics = Integer.valueOf(stringMetrics);
+
+        // Si el usuario ha seleccionado otra opción de metricas, actualizo la variable y el
+        // modelo
+        if(metrics != mCurrentMetrics){
+            mCurrentMetrics = metrics;
+            setForecast(mForecast);
+        }
     }
 }

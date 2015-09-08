@@ -127,12 +127,15 @@ public class SettingsActivity extends PreferenceActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+
+            // Añadimos panel de preferencias a partir de fichero xml
             addPreferencesFromResource(R.xml.pref_general);
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
+            // Enlazamos nuestros parámetros de preferencias con sus valores
             bindPreferenceSummaryToValue(findPreference(getString(R.string.metric_selection)));
         }
     }
